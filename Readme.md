@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Олег Гудзий](https://up.htmlacademy.ru/javascript/13/user/91267).
-* Наставник: `Неизвестно`.
+* Наставник: `Без наставника`.
 
 ---
 
