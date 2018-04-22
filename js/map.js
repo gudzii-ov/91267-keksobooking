@@ -168,3 +168,159 @@ var generatedOffers = generateOffers();
 
 var mapBlock = document.querySelector('.map');
 mapBlock.classList.remove('map--faded');
+
+/* функция размещает маркеры в блоке маркеров */
+var placePins = function (offers) {
+  /* функция отрисовки карточки объявления */
+  var renderOfferCard = function (offerData) {
+    /* функция показывает карточку объявления */
+    var getOfferCard = function (offer) {
+      var getFeaturesFragment = function (data) {
+        var fragment = document.createDocumentFragment();
+
+        for (var i = 0; i < data.length; i++) {
+          var featureClass = 'feature--' + data[i];
+          var featureElement = document.createElement('li');
+
+          featureElement.classList.add('feature', featureClass);
+          fragment.appendChild(featureElement);
+        }
+
+        return fragment;
+      };
+
+      var getPicturesFragment = function (data) {
+        var fragment = document.createDocumentFragment();
+
+        for (var i = 0; i < data.length; i++) {
+          var pictureListElement = document.createElement('li');
+          var pictureElement = document.createElement('img');
+          pictureElement.setAttribute('src', data[i]);
+          pictureElement.setAttribute('width', '100'); // TODO
+          pictureElement.setAttribute('height', '100'); // TODO
+
+          pictureListElement.appendChild(pictureElement);
+          fragment.appendChild(pictureListElement);
+        }
+
+        return fragment;
+      };
+
+      var offerTemplate = document.querySelector('template').content.children[0];
+      var offerElement = offerTemplate.cloneNode(true);
+
+      var offerTitle = offer.offer.title;
+      offerElement.querySelector('h3').textContent = offerTitle;
+
+      var offerAddress = offer.offer.address;
+      offerElement.querySelector('small').textContent = offerAddress;
+
+      var offerPrice = offer.offer.price + '\u20BD/ночь';
+      offerElement.querySelector('.popup__price').textContent = offerPrice;
+
+      /* соответствие типов жилья назвванию */
+      var offerTypes = {
+        'flat': 'Квартира',
+        'house': 'Дом',
+        'bungalo': 'Бунгало'
+      };
+      var offerType = offer.offer.type;
+      var offerElementType = offerTypes[offerType];
+      offerElement.querySelector('h4').textContent = offerElementType;
+
+      var guestsAndRooms = offer.offer.rooms + ' комнаты для ' + offer.offer.guests + ' гостей';
+      offerElement.children[6].textContent = guestsAndRooms;
+
+      var chekInOut = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
+      offerElement.children[7].textContent = chekInOut;
+
+      var offerDescription = offer.offer.description;
+      offerElement.children[9].textContent = offerDescription;
+
+      var featuresFragment = getFeaturesFragment(offer.offer.features);
+      var featuresBlock = offerElement.querySelector('.popup__features');
+      featuresBlock.textContent = '';
+      featuresBlock.appendChild(featuresFragment);
+
+      var picturesFragment = getPicturesFragment(offer.offer.photos);
+      var picturesBlock = offerElement.querySelector('.popup__pictures');
+      picturesBlock.textContent = '';
+      picturesBlock.appendChild(picturesFragment);
+
+      var avatar = offer.author.avatar;
+      offerElement.querySelector('.popup__avatar').setAttribute('src', avatar);
+
+      return offerElement;
+    };
+
+    var offerCard = getOfferCard(offerData);
+
+    var mapElement = document.querySelector('.map');
+    var filtersElement = mapElement.querySelector('.map__filters-container');
+
+    mapElement.insertBefore(offerCard, filtersElement);
+
+    var popupElement = mapElement.querySelector('.popup');
+    var popupCloseElement = popupElement.querySelector('.popup__close');
+
+    var popupCloseClickHandler = function () {
+      popupElement.remove();
+      popupCloseElement.removeEventListener('click', popupCloseClickHandler);
+    };
+
+    popupCloseElement.addEventListener('click', popupCloseClickHandler);
+  };
+
+  /* функция создает массив меток объявлений пользователей на основе массив исходных данных data*/
+  var generatePins = function (data) {
+    var pins = [];
+
+    for (var i = 0; i < data.length; i++) {
+      var pinIconWidth = 45;
+      var pinIconHeight = 70;
+      var offer = data[i];
+      var addressX = offer.location.x - Math.floor(pinIconWidth / 2);
+      var addressY = offer.location.y - pinIconHeight;
+      var avatar = offer.author.avatar;
+      var altText = offer.offer.title;
+
+      pins[i] = {
+        'innerHTML': '<img src=' + avatar + ' alt="' + altText + '" width="40" height="40" draggable="false">',
+        'classList': 'map__pin',
+        'style': 'left: ' + addressX + 'px; top: ' + addressY + 'px;'
+      };
+    }
+
+    return pins;
+  };
+
+  var mapPinsElement = document.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
+
+  /* генерируем маркеры на основе данных */
+  var pins = generatePins(offers);
+  /* обработчик события клика на метке - открывает карточку объявления */
+
+  var addPinClickListener = function (element, offer) {
+    var pinClickHandler = function () {
+      renderOfferCard(offer);
+    };
+    element.addEventListener('click', pinClickHandler);
+  };
+
+  for (var i = 0; i < pins.length; i++) {
+    var pin = document.createElement('button');
+    var offer = offers[i];
+    pin.classList.add(pins[i].classList);
+    pin.innerHTML = pins[i].innerHTML;
+    pin.setAttribute('style', pins[i].style);
+
+    addPinClickListener(pin, offer);
+
+    fragment.appendChild(pin);
+  }
+
+  mapPinsElement.appendChild(fragment);
+};
+
+placePins(generatedOffers);
