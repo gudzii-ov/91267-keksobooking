@@ -166,9 +166,6 @@ var generateOffers = function () {
 /* генерируем данные */
 var generatedOffers = generateOffers();
 
-var mapBlock = document.querySelector('.map');
-mapBlock.classList.remove('map--faded');
-
 /* функция размещает маркеры в блоке маркеров */
 var placePins = function (offers) {
   /* функция отрисовки карточки объявления */
