@@ -44,20 +44,24 @@
     return fragment;
   };
 
-  /* функция готовит DOM-фрагмент карточки объявления */
-  var getOfferCard = function (offer) {
+  /* функция создает карточку объявления с обработчиками */
+  var getOfferCard = function () {
+    var template = document.querySelector('template').content.children[0];
+    var cardElement = template.cloneNode(true);
 
-    var offerTemplate = document.querySelector('template').content.children[0];
-    var offerElement = offerTemplate.cloneNode(true);
+    return cardElement;
+  };
 
+  /* функция наполняет карточку объявления данными */
+  var fillOfferCard = function (card, offer) {
     var offerTitle = offer.offer.title;
-    offerElement.querySelector('.popup__title').textContent = offerTitle;
+    card.querySelector('.popup__title').textContent = offerTitle;
 
     var offerAddress = offer.offer.address;
-    offerElement.querySelector('.popup__text--address').textContent = offerAddress;
+    card.querySelector('.popup__text--address').textContent = offerAddress;
 
     var offerPrice = offer.offer.price + '\u20BD/ночь';
-    offerElement.querySelector('.popup__text--price').textContent = offerPrice;
+    card.querySelector('.popup__text--price').textContent = offerPrice;
 
     /* соответствие типов жилья названию */
     var offerTypes = {
@@ -67,31 +71,29 @@
     };
     var offerType = offer.offer.type;
     var offerElementType = offerTypes[offerType];
-    offerElement.querySelector('.popup__type').textContent = offerElementType;
+    card.querySelector('.popup__type').textContent = offerElementType;
 
     var guestsAndRooms = offer.offer.rooms + ' комнаты для ' + offer.offer.guests + ' гостей';
-    offerElement.querySelector('.popup__text--capacity').textContent = guestsAndRooms;
+    card.querySelector('.popup__text--capacity').textContent = guestsAndRooms;
 
     var chekInOut = 'Заезд после ' + offer.offer.checkin + ', выезд до ' + offer.offer.checkout;
-    offerElement.querySelector('.popup__text--time').textContent = chekInOut;
+    card.querySelector('.popup__text--time').textContent = chekInOut;
 
     var offerDescription = offer.offer.description;
-    offerElement.querySelector('.popup__description').textContent = offerDescription;
+    card.querySelector('.popup__description').textContent = offerDescription;
 
     var featuresFragment = getFeaturesFragment(offer.offer.features);
-    var featuresBlock = offerElement.querySelector('.popup__features');
+    var featuresBlock = card.querySelector('.popup__features');
     featuresBlock.textContent = '';
     featuresBlock.appendChild(featuresFragment);
 
     var photosFragment = getPhotosBlockFragment(offer.offer.photos);
-    var photosBlock = offerElement.querySelector('.popup__photos');
+    var photosBlock = card.querySelector('.popup__photos');
     photosBlock.textContent = ''; // удаляет содержимое блока фотографий из шаблона
     photosBlock.appendChild(photosFragment);
 
     var avatar = offer.author.avatar;
-    offerElement.querySelector('.popup__avatar').setAttribute('src', avatar);
-
-    return offerElement;
+    card.querySelector('.popup__avatar').setAttribute('src', avatar);
   };
 
   /* функция отрисовки карточки объявления */
