@@ -48,6 +48,11 @@
   var getOfferCard = function () {
     var template = document.querySelector('template').content.children[0];
     var cardElement = template.cloneNode(true);
+    cardElement.style.display = 'none';
+
+    var mapElement = document.querySelector('.map');
+    var filtersElement = mapElement.querySelector('.map__filters-container');
+    mapElement.insertBefore(cardElement, filtersElement);
 
     return cardElement;
   };
@@ -97,24 +102,19 @@
   };
 
   /* функция отрисовки карточки объявления */
-  var renderOfferCard = function (offerData) {
-    /* функция показывает карточку объявления */
-    var offerCard = getOfferCard(offerData);
-
-    var mapElement = document.querySelector('.map');
-    var filtersElement = mapElement.querySelector('.map__filters-container');
-
-    mapElement.insertBefore(offerCard, filtersElement);
-
-    var popupElement = mapElement.querySelector('.popup');
-    var popupCloseElement = popupElement.querySelector('.popup__close');
+  var renderOfferCard = function (element, data) {
+    fillOfferCard(element, data);
+    if (element.style.display === 'none') {
+      element.style.display = 'block';
+    }
+    var cardCloseElement = element.querySelector('.popup__close');
 
     var popupCloseClickHandler = function () {
-      popupElement.remove();
-      popupCloseElement.removeEventListener('click', popupCloseClickHandler);
+      element.style.display = 'none';
+      cardCloseElement.removeEventListener('click', popupCloseClickHandler);
     };
 
-    popupCloseElement.addEventListener('click', popupCloseClickHandler);
+    cardCloseElement.addEventListener('click', popupCloseClickHandler);
   };
 
   /* функция создает DOM-элемент маркера объявления */
@@ -146,15 +146,15 @@
   };
 
   /* обработчик события клика на метке - открывает карточку объявления */
-  var addPinClickListener = function (element, data) {
+  var addPinClickListener = function (element, cardElement, data) {
     var pinClickHandler = function () {
-      renderOfferCard(data);
+      renderOfferCard(cardElement, data);
     };
     element.addEventListener('click', pinClickHandler);
   };
 
   /* функция готовит DOM-фрагмент блока маркеров */
-  var getPinsBlockFragment = function (pins, offers) {
+  var getPinsBlockFragment = function (pins, cardElement, offers) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < pins.length; i++) {
@@ -164,7 +164,7 @@
       pin.innerHTML = pins[i].innerHTML;
       pin.setAttribute('style', pins[i].style);
 
-      addPinClickListener(pin, offer);
+      addPinClickListener(pin, cardElement, offer);
 
       fragment.appendChild(pin);
     }
@@ -174,9 +174,11 @@
 
   /* функция размещает маркеры в блоке маркеров */
   var placePins = function (offers) {
+    var offerCard = getOfferCard(offers);
     var pins = getPins(offers);
-    var pinsFragment = getPinsBlockFragment(pins, offers);
+    var pinsFragment = getPinsBlockFragment(pins, offerCard, offers);
     var mapPinsElement = document.querySelector('.map__pins');
+
     mapPinsElement.appendChild(pinsFragment);
   };
 
