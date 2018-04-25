@@ -3,6 +3,7 @@
 (function () {
   var formBlock = document.querySelector('.ad-form');
   var formElements = formBlock.querySelectorAll('fieldset');
+  var addressField = formBlock.querySelector('#address');
 
   var disableFormElements = function () {
     formElements.forEach(function (element) {
@@ -14,6 +15,7 @@
     formElements.forEach(function (element) {
       element.removeAttribute('disabled');
     });
+    addressField.setAttribute('disabled', 'disabled');
   };
 
   var disableForm = function () {
@@ -27,7 +29,6 @@
   };
 
   var fillAddress = function (text) {
-    var addressField = formBlock.querySelector('#address');
     addressField.value = text;
     addressField.placeholder = text;
   };

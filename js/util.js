@@ -2,13 +2,16 @@
 
 (function () {
   var getElementDimensions = function (element) {
-    var dimensions = element.getBoundingClientRect();
-    var width = dimensions.right - dimensions.left;
-    var height = dimensions.bottom - dimensions.top;
+    var position = element.getBoundingClientRect();
+    var width = position.right - position.left;
+    var height = position.bottom - position.top;
 
     return {
-      width: width,
-      height: height
+      position: position,
+      dimensions: {
+        width: width,
+        height: height
+      }
     };
   };
 
