@@ -182,7 +182,26 @@
     mapPinsElement.appendChild(pinsFragment);
   };
 
+  var getPinCoords = function (pinElement, isTailed) {
+    var pinDimensions = window.util.getElementDimensions(pinElement);
+
+    if (isTailed) {
+      var PIN_TAIL_HEIGHT = 22;
+      var pinY = pinDimensions.height + PIN_TAIL_HEIGHT;
+    } else {
+      pinY = pinDimensions.height / 2;
+    }
+
+    var pinCoords = {
+      pinX: pinDimensions.width / 2,
+      pinY: pinY
+    };
+
+    return pinCoords;
+  };
+
   window.card = {
-    placePins: placePins
+    placePins: placePins,
+    getPinCoords: getPinCoords
   };
 })();

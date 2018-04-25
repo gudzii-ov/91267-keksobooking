@@ -26,8 +26,15 @@
     enableFormElements();
   };
 
+  var fillAddress = function (text) {
+    var addressField = formBlock.querySelector('#address');
+    addressField.value = text;
+    addressField.placeholder = text;
+  };
+
   window.form = {
     disableForm: disableForm,
-    enableForm: enableForm
+    enableForm: enableForm,
+    fillAddress: fillAddress
   };
 })();
