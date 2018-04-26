@@ -14,8 +14,8 @@
   var addressField = formBlock.elements.address;
   var priceField = formBlock.elements.price;
   var typeField = formBlock.elements.type;
-  // var timeinField = formBlock.elements.timein;
-  // var timeoutField = formBlock.elements.timeout;
+  var timeinField = formBlock.elements.timein;
+  var timeoutField = formBlock.elements.timeout;
 
   var disableFormElements = function () {
     formElements.forEach(function (element) {
@@ -50,21 +50,24 @@
     priceField.setAttribute('placeholder', value);
   };
 
-  var getTypeFieldValue = function () {
-    return typeField.options[typeField.selectedIndex].value;
-  };
-
   var onchangeTypeHandler = function () {
-    var type = getTypeFieldValue();
+    var type = typeField.value;
     var price = TYPE_PRICE[type];
     setPriceFieldAttributes(price);
   };
 
   typeField.addEventListener('change', onchangeTypeHandler);
 
-  // var setSelectFieldValue = function (field, value) {
-  //   field.
-  // };
+  var syncTimefields = function (field1, field2) {
+    var onchangeTimeHandler = function () {
+      field2.value = field1.value;
+    };
+
+    field1.addEventListener('change', onchangeTimeHandler);
+  };
+
+  syncTimefields(timeinField, timeoutField);
+  syncTimefields(timeoutField, timeinField);
 
   window.form = {
     disableForm: disableForm,
