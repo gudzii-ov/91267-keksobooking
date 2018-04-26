@@ -9,14 +9,51 @@ window.form.fillAddress(mainPinInactiveCoords.pinX + ', ' + mainPinInactiveCoord
 
 var generatedOffers = window.dummyData.generateOffers();
 
-var mainPinMouseupHandler = function () {
-  var mainPinActiveCoords = window.card.getPinCoords(mainPinElement, true);
-
+var mainPinFirstMouseupHandler = function () {
   window.page.activatePage(mapBlock);
   window.card.placePins(generatedOffers);
-  window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
 
-  mainPinElement.removeEventListener('click', mainPinMouseupHandler);
+  mainPinElement.removeEventListener('mouseup', mainPinFirstMouseupHandler);
 };
 
-mainPinElement.addEventListener('click', mainPinMouseupHandler);
+mainPinElement.addEventListener('mouseup', mainPinFirstMouseupHandler);
+
+var mainPinMousedownHandler = function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mainPinMouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mainPinElement.style.top = (mainPinElement.offsetTop - shift.y) + 'px';
+    mainPinElement.style.left = (mainPinElement.offsetLeft - shift.x) + 'px';
+    var mainPinActiveCoords = window.card.getPinCoords(mainPinElement, true);
+    window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
+  };
+
+  var mainPinMouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', mainPinMouseMoveHandler);
+    document.removeEventListener('mouseup', mainPinMouseUpHandler);
+  };
+
+  document.addEventListener('mousemove', mainPinMouseMoveHandler);
+  document.addEventListener('mouseup', mainPinMouseUpHandler);
+};
+
+mainPinElement.addEventListener('mousedown', mainPinMousedownHandler);
