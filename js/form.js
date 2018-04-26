@@ -10,9 +10,12 @@
 
   var formBlock = document.querySelector('.ad-form');
   var formElements = formBlock.querySelectorAll('fieldset');
-  var addressField = formBlock.querySelector('#address');
-  var priceField = formBlock.querySelector('#price');
-  var typeField = formBlock.querySelector('#type');
+
+  var addressField = formBlock.elements.address;
+  var priceField = formBlock.elements.price;
+  var typeField = formBlock.elements.type;
+  // var timeinField = formBlock.elements.timein;
+  // var timeoutField = formBlock.elements.timeout;
 
   var disableFormElements = function () {
     formElements.forEach(function (element) {
@@ -58,6 +61,10 @@
   };
 
   typeField.addEventListener('change', onchangeTypeHandler);
+
+  // var setSelectFieldValue = function (field, value) {
+  //   field.
+  // };
 
   window.form = {
     disableForm: disableForm,
