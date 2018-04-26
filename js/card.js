@@ -187,13 +187,13 @@
 
     if (isTailed) {
       var PIN_TAIL_HEIGHT = 22;
-      var pinY = pinDimensions.height + PIN_TAIL_HEIGHT;
+      var pinY = pinDimensions.position.top + pinDimensions.dimensions.height + PIN_TAIL_HEIGHT;
     } else {
-      pinY = pinDimensions.height / 2;
+      pinY = pinDimensions.position.top + pinDimensions.dimensions.height / 2;
     }
 
     var pinCoords = {
-      pinX: pinDimensions.width / 2,
+      pinX: pinDimensions.position.left + pinDimensions.dimensions.width / 2,
       pinY: pinY
     };
 

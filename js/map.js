@@ -15,6 +15,8 @@ var mainPinMouseupHandler = function () {
   window.page.activatePage(mapBlock);
   window.card.placePins(generatedOffers);
   window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
+
+  mainPinElement.removeEventListener('click', mainPinMouseupHandler);
 };
 
 mainPinElement.addEventListener('click', mainPinMouseupHandler);
