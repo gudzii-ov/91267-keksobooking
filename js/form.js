@@ -11,12 +11,6 @@
   var formBlock = document.querySelector('.ad-form');
   var formElements = formBlock.querySelectorAll('fieldset');
 
-  var addressField = formBlock.elements.address;
-  var priceField = formBlock.elements.price;
-  var typeField = formBlock.elements.type;
-  var timeinField = formBlock.elements.timein;
-  var timeoutField = formBlock.elements.timeout;
-
   var disableFormElements = function () {
     formElements.forEach(function (element) {
       element.setAttribute('disabled', 'disabled');
@@ -40,10 +34,15 @@
     enableFormElements();
   };
 
+  var addressField = formBlock.elements.address;
+
   var fillAddress = function (text) {
     addressField.value = text;
     addressField.placeholder = text;
   };
+
+  var priceField = formBlock.elements.price;
+  var typeField = formBlock.elements.type;
 
   var setPriceFieldAttributes = function (value) {
     priceField.setAttribute('min', value);
@@ -58,6 +57,9 @@
 
   typeField.addEventListener('change', onchangeTypeHandler);
 
+  var timeinField = formBlock.elements.timein;
+  var timeoutField = formBlock.elements.timeout;
+
   var syncTimefields = function (field1, field2) {
     var onchangeTimeHandler = function () {
       field2.value = field1.value;
@@ -68,6 +70,36 @@
 
   syncTimefields(timeinField, timeoutField);
   syncTimefields(timeoutField, timeinField);
+
+  var roomsField = formBlock.elements.rooms;
+  var capacityField = formBlock.elements.capacity;
+
+  var checkRoomCapacity = function () {
+    var constraints = {
+      1: ['1'],
+      2: ['1', '2'],
+      3: ['1', '2', '3'],
+      100: ['0']
+    };
+
+    var roomsNumber = roomsField.value;
+    var constraint = constraints[roomsNumber];
+    var constraintString = 'Возможное количество гостей: ' + constraint.join(', ');
+
+    var capacity = capacityField.value;
+
+    if (constraint.indexOf(capacity) !== (-1)) {
+      capacityField.setCustomValidity('');
+    } else {
+      capacityField.setCustomValidity(constraintString);
+    }
+  };
+
+  roomsField.addEventListener('change', checkRoomCapacity);
+  capacityField.addEventListener('change', checkRoomCapacity);
+
+  var submitButton = formBlock.querySelector('.ad-form__submit');
+  submitButton.addEventListener('click', checkRoomCapacity);
 
   window.form = {
     disableForm: disableForm,
