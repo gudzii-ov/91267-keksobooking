@@ -21,7 +21,7 @@
     formElements.forEach(function (element) {
       element.removeAttribute('disabled');
     });
-    addressField.setAttribute('disabled', 'disabled');
+    addressField.setAttribute('readonly', 'true');
   };
 
   var disableForm = function () {

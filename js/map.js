@@ -4,19 +4,19 @@ var mapBlock = document.querySelector('.map');
 window.page.deactivatePage(mapBlock);
 
 var mainPinElement = mapBlock.querySelector('.map__pin--main');
-var mainPinInactiveCoords = window.card.getPinCoords(mainPinElement, false);
+var mainPinInactiveCoords = window.card.getPinCoords(mapBlock, mainPinElement, false);
 window.form.fillAddress(mainPinInactiveCoords.pinX + ', ' + mainPinInactiveCoords.pinY);
 
 var generatedOffers = window.dummyData.generateOffers();
 
-var mainPinMouseupHandler = function () {
-  var mainPinActiveCoords = window.card.getPinCoords(mainPinElement, true);
-
+var mainPinFirstMouseupHandler = function (evt) {
+  evt.preventDefault();
   window.page.activatePage(mapBlock);
   window.card.placePins(generatedOffers);
-  window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
 
-  mainPinElement.removeEventListener('click', mainPinMouseupHandler);
+  mainPinElement.removeEventListener('mouseup', mainPinFirstMouseupHandler);
 };
 
-mainPinElement.addEventListener('click', mainPinMouseupHandler);
+mainPinElement.addEventListener('mouseup', mainPinFirstMouseupHandler);
+
+window.card.addMainPinMousedownHandler(mapBlock, mainPinElement);
