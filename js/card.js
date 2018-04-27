@@ -182,25 +182,50 @@
     mapPinsElement.appendChild(pinsFragment);
   };
 
-  var getPinCoords = function (pinElement, isTailed) {
+  var getPinCoords = function (containerBlock, pinElement, isTailed) {
+    var containerBlockDimensions = window.util.getElementDimensions(containerBlock);
     var pinDimensions = window.util.getElementDimensions(pinElement);
+
+    // позиция блока-контейнера в документе
+    var containerBlockDocumentPosition = {
+      top: containerBlockDimensions.position.top + pageYOffset,
+      bottom: containerBlockDimensions.position.bottom + pageYOffset,
+      left: containerBlockDimensions.position.left + pageXOffset,
+      right: containerBlockDimensions.position.right + pageXOffset
+    };
+
+    // позиция маркера в документе
+    var pinElementDocumentPosition = {
+      top: pinDimensions.position.top + pageYOffset,
+      bottom: pinDimensions.position.bottom + pageYOffset,
+      left: pinDimensions.position.left + pageXOffset,
+      right: pinDimensions.position.right + pageXOffset
+    };
+
+    // позиция маркера внутри контейнера
+    var pinElementContainerPosition = {
+      top: pinElementDocumentPosition.top - containerBlockDocumentPosition.top,
+      bottom: pinElementDocumentPosition.bottom - containerBlockDocumentPosition.bottom,
+      left: pinElementDocumentPosition.left - containerBlockDocumentPosition.left,
+      right: pinElementDocumentPosition.right - containerBlockDocumentPosition.right
+    };
 
     if (isTailed) {
       var PIN_TAIL_HEIGHT = 22;
-      var pinY = pinDimensions.position.top + pinDimensions.dimensions.height + PIN_TAIL_HEIGHT;
+      var pinY = pinElementContainerPosition.top + pinDimensions.dimensions.height + PIN_TAIL_HEIGHT;
     } else {
-      pinY = pinDimensions.position.top + pinDimensions.dimensions.height / 2;
+      pinY = pinElementContainerPosition.top + pinDimensions.dimensions.height / 2;
     }
 
     var pinCoords = {
-      pinX: pinDimensions.position.left + pinDimensions.dimensions.width / 2,
+      pinX: pinElementContainerPosition.left + pinDimensions.dimensions.width / 2,
       pinY: pinY
     };
 
     return pinCoords;
   };
 
-  var addMainPinMousedownHandler = function (mainPinElement) {
+  var addMainPinMousedownHandler = function (containerBlock, mainPinElement) {
     var mainPinMousedownHandler = function (evt) {
       evt.preventDefault();
 
@@ -224,12 +249,14 @@
 
         mainPinElement.style.top = (mainPinElement.offsetTop - shift.y) + 'px';
         mainPinElement.style.left = (mainPinElement.offsetLeft - shift.x) + 'px';
-        var mainPinActiveCoords = window.card.getPinCoords(mainPinElement, true);
+        var mainPinActiveCoords = window.card.getPinCoords(containerBlock, mainPinElement, true);
         window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
       };
 
       var mainPinMouseUpHandler = function (upEvt) {
         upEvt.preventDefault();
+        var mainPinActiveCoords = window.card.getPinCoords(containerBlock, mainPinElement, true);
+        window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
 
         document.removeEventListener('mousemove', mainPinMouseMoveHandler);
         document.removeEventListener('mouseup', mainPinMouseUpHandler);
