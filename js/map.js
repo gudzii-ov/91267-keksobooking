@@ -9,7 +9,8 @@ window.form.fillAddress(mainPinInactiveCoords.pinX + ', ' + mainPinInactiveCoord
 
 var generatedOffers = window.dummyData.generateOffers();
 
-var mainPinFirstMouseupHandler = function () {
+var mainPinFirstMouseupHandler = function (evt) {
+  evt.preventDefault();
   window.page.activatePage(mapBlock);
   window.card.placePins(generatedOffers);
 

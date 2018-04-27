@@ -194,20 +194,12 @@
       right: containerBlockDimensions.position.right + pageXOffset
     };
 
-    // позиция маркера в документе
-    var pinElementDocumentPosition = {
-      top: pinDimensions.position.top + pageYOffset,
-      bottom: pinDimensions.position.bottom + pageYOffset,
-      left: pinDimensions.position.left + pageXOffset,
-      right: pinDimensions.position.right + pageXOffset
-    };
-
-    // позиция маркера внутри контейнера
+    // позиция маркера внутри контейнера = позиция маркера в документе - позиция контейнера в документе
     var pinElementContainerPosition = {
-      top: pinElementDocumentPosition.top - containerBlockDocumentPosition.top,
-      bottom: pinElementDocumentPosition.bottom - containerBlockDocumentPosition.bottom,
-      left: pinElementDocumentPosition.left - containerBlockDocumentPosition.left,
-      right: pinElementDocumentPosition.right - containerBlockDocumentPosition.right
+      top: pinDimensions.position.top + pageYOffset - containerBlockDocumentPosition.top,
+      bottom: pinDimensions.position.bottom + pageYOffset - containerBlockDocumentPosition.bottom,
+      left: pinDimensions.position.left + pageXOffset - containerBlockDocumentPosition.left,
+      right: pinDimensions.position.right + pageXOffset - containerBlockDocumentPosition.right
     };
 
     if (isTailed) {
