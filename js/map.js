@@ -17,7 +17,7 @@ mapElement.insertBefore(cardElement, filtersElement);
 var mainPinFirstMouseupHandler = function (evt) {
   evt.preventDefault();
   window.page.activatePage(mapBlock);
-  window.pin.placePins(generatedOffers);
+  window.pin.placePins(generatedOffers, cardElement);
 
   mainPinElement.removeEventListener('mouseup', mainPinFirstMouseupHandler);
 };

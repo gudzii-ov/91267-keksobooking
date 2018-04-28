@@ -57,10 +57,9 @@
   };
 
   /* функция размещает маркеры в блоке маркеров */
-  var placePins = function (offers) {
-    var offerCard = window.card.getOfferCard(offers);
+  var placePins = function (offers, offerCardElement) {
     var pins = getPins(offers);
-    var pinsFragment = getPinsBlockFragment(pins, offerCard, offers);
+    var pinsFragment = getPinsBlockFragment(pins, offerCardElement, offers);
     var mapPinsElement = document.querySelector('.map__pins');
 
     mapPinsElement.appendChild(pinsFragment);
@@ -125,13 +124,13 @@
 
         mainPinElement.style.top = (mainPinElement.offsetTop - shift.y) + 'px';
         mainPinElement.style.left = (mainPinElement.offsetLeft - shift.x) + 'px';
-        var mainPinActiveCoords = window.card.getPinCoords(containerBlock, mainPinElement, true);
+        var mainPinActiveCoords = getPinCoords(containerBlock, mainPinElement, true);
         window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
       };
 
       var mainPinMouseUpHandler = function (upEvt) {
         upEvt.preventDefault();
-        var mainPinActiveCoords = window.card.getPinCoords(containerBlock, mainPinElement, true);
+        var mainPinActiveCoords = getPinCoords(containerBlock, mainPinElement, true);
         window.form.fillAddress(mainPinActiveCoords.pinX + ', ' + mainPinActiveCoords.pinY);
 
         document.removeEventListener('mousemove', mainPinMouseMoveHandler);

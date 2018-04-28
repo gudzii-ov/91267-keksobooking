@@ -50,15 +50,6 @@
     var cardElement = template.cloneNode(true);
     cardElement.style.display = 'none';
 
-    var cardCloseElement = cardElement.querySelector('.popup__close');
-
-    var popupCloseClickHandler = function () {
-      cardElement.style.display = 'none';
-      cardCloseElement.removeEventListener('click', popupCloseClickHandler);
-    };
-
-    cardCloseElement.addEventListener('click', popupCloseClickHandler);
-
     return cardElement;
   };
 
@@ -112,6 +103,15 @@
     if (element.style.display === 'none') {
       element.style.display = 'block';
     }
+
+    var cardCloseElement = element.querySelector('.popup__close');
+
+    var popupCloseClickHandler = function () {
+      element.style.display = 'none';
+      cardCloseElement.removeEventListener('click', popupCloseClickHandler);
+    };
+
+    cardCloseElement.addEventListener('click', popupCloseClickHandler);
 
   };
 
