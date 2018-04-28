@@ -100,6 +100,7 @@
   /* функция отрисовки карточки объявления */
   var showOfferCard = function (element, data) {
     fillOfferCard(element, data);
+
     if (element.style.display === 'none') {
       element.style.display = 'block';
     }
