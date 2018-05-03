@@ -57,9 +57,9 @@
   };
 
   /* функция размещает маркеры в блоке маркеров */
-  var placePins = function (offers, offerCardElement) {
+  var placePins = function (offers) {
     var pins = getPins(offers);
-    var pinsFragment = getPinsBlockFragment(pins, offerCardElement, offers);
+    var pinsFragment = getPinsBlockFragment(pins, window.card.cardElement, offers);
     var mapPinsElement = document.querySelector('.map__pins');
 
     mapPinsElement.appendChild(pinsFragment);

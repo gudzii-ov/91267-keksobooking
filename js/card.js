@@ -116,8 +116,11 @@
 
   };
 
+  var cardElement = getOfferCardElement();
+
   window.card = {
-    getOfferCardElement: getOfferCardElement,
+    // getOfferCardElement: getOfferCardElement,
+    cardElement: cardElement,
     showOfferCard: showOfferCard
   };
 })();
